@@ -1,51 +1,10 @@
 <template>
   <div class="row">
-
-    <a target="_blank" rel="noopener noreferrer" href="https://chat.deepseek.com/" class="shortcut">
+    <a v-for="link in linkList" :key="link.url" target="_blank" rel="noopener noreferrer" :href="link.url"
+      class="shortcut">
       <div>
-        <img class="icon" src="https://chat.deepseek.com/favicon.svg" alt="Icon">
-      </div>
-    </a>
-
-    <a target="_blank" rel="noopener noreferrer" href="https://google.com/" class="shortcut">
-      <div>
-        <img class="icon" src="https://google.com/favicon.ico" alt="Icon">
-      </div>
-    </a>
-
-    <a target="_blank" rel="noopener noreferrer" href="https://chatgpt.com/" class="shortcut">
-      <div>
-        <img class="icon" src="https://chatgpt.com/favicon.ico" alt="Icon">
-      </div>
-    </a>
-
-    <a target="_blank" rel="noopener noreferrer" href="https://cursos.alura.com.br/" class="shortcut">
-      <div>
-        <img class="icon" src="https://cursos.alura.com.br/favicon.ico" alt="Icon">
-      </div>
-    </a>
-
-    <a target="_blank" rel="noopener noreferrer" href="https://cursos.aluralingua.com.br/" class="shortcut">
-      <div>
-        <img class="icon" src="https://cursos.aluralingua.com.br/favicon.ico" alt="Icon">
-      </div>
-    </a>
-
-    <a target="_blank" rel="noopener noreferrer" href="https://docs.google.com/spreadsheets/" class="shortcut">
-      <div>
-        <img class="icon" src="https://ssl.gstatic.com/docs/spreadsheets/spreadsheets_2023q4.ico" alt="Icon">
-      </div>
-    </a>
-
-    <a target="_blank" rel="noopener noreferrer" href="https://jobs.workinlithuania.com/" class="shortcut">
-      <div>
-        <img class="icon" src="https://jobs.workinlithuania.com/favicon-32x32.png?v=2" alt="Icon">
-      </div>
-    </a>
-
-    <a target="_blank" rel="noopener noreferrer" href="https://wellfound.com/" class="shortcut">
-      <div>
-        <img class="icon" src="https://wellfound.com/favicon.ico" alt="Icon">
+        <img class="icon" :src="getIcon(link)" alt="Icon" @error="onIconError($event, link)">
+        <span>{{ getLinkName(link) }}</span>
       </div>
     </a>
   </div>
@@ -64,27 +23,31 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { ref } from 'vue'
+import links from '@/assets/links.json'
+function getLinkName(link) {
+  if (link.name) return link.name
+  const hostname = new URL(link.url).hostname;
+  return hostname.replace('www.', '').split('.')[0];
+}
+function getIcon(link) {
+  if (link.icon) return link.icon
+  return link.url + '/favicon.ico'
+}
 
-onMounted(() => {
-  addSiteNamesToLinks()
-})
+function onIconError(event, link) {
+  if (event.target.dataset.fallback === 'svg') {
+    event.target.src = require('@/assets/img/icon.png')
+    event.target.dataset.fallback = 'generic'
+    return
+  }
+  if (event.target.dataset.fallback) return
+  event.target.src = link.url + '/favicon.svg'
+  event.target.dataset.fallback = 'svg'
+}
 
-const addSiteNamesToLinks = () => {
-  const links = document.querySelectorAll('a[href]');
 
-  links.forEach(link => {
-    const hostname = new URL(link.href).hostname;
-    // Remove www. e pega só a primeira parte antes do primeiro ponto
-    const name = hostname.replace('www.', '').split('.')[0];
-    if (name) {
-      const span = document.createElement('span');
-      span.textContent = name;
-      link.querySelector('div').appendChild(span);
-    }
-
-  });
-};
+const linkList = ref(links)
 
 </script>
 
@@ -102,20 +65,20 @@ const addSiteNamesToLinks = () => {
 .shortcut {
   position: relative;
   top: 20px;
-  left: 20px;
   width: 100px;
+  left: 20px;
   color: white;
-  text-shadow: -1px 1px 0px #00000054;
   height: 100px;
-  border-radius: 10px;
-  text-align: center;
-  border-radius: 10px;
   display: inline-flex;
-  justify-content: center;
+  text-align: center;
+  font-family: sans-serif;
   align-items: flex-end;
+  text-shadow: -1px 1px 0px #00000054;
+  border-radius: 10px;
+  border-radius: 10px;
+  justify-content: center;
   text-decoration: none;
   text-transform: capitalize;
-  font-family: sans-serif;
 }
 
 .shortcut div {

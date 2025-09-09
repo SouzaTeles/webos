@@ -1,0 +1,34 @@
+[
+    {
+        "name": "DeepSeek",
+        "url": "https://chat.deepseek.com/"
+    },
+    {
+        "name": "Google",
+        "url": "https://google.com/"
+    },
+    {
+        "name": "ChatGPT",
+        "url": "https://chatgpt.com/"
+    },
+    {
+        "name": "Alura",
+        "url": "https://cursos.alura.com.br/"
+    },
+    {
+        "name": "Alura Lingua",
+        "url": "https://cursos.aluralingua.com.br/"
+    },
+    {
+        "name": "Google Sheets",
+        "url": "https://docs.google.com/spreadsheets/"
+    },
+    {
+        "name": "Work in Lithuania",
+        "url": "https://jobs.workinlithuania.com/"
+    },
+    {
+        "name": "Wellfound",
+        "url": "https://wellfound.com/"
+    }
+]
